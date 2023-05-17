@@ -68,11 +68,14 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
                 return bookedRide;
             }
 
-            bookedRide.IsSuccess = true;
             bookedRide = _mapper.Map<BookRideDto>(ride);
+            bookedRide.IsSuccess = true;
             bookedRide.Seats = new List<SeatDto>();
 
-            for (int i = request.NumberOfSeats + 1; i <= ride.NumberOfSeats - ride.SeatsAvailable + request.NumberOfSeats; i++)
+            int seatsFrom = ride.NumberOfSeats - ride.SeatsAvailable + 1;
+            int seatsTo = ride.NumberOfSeats - ride.SeatsAvailable + request.NumberOfSeats;
+
+            for (int i = seatsFrom; i <= seatsTo; i++)
             {
                 bookedRide.Seats.Add(new SeatDto() { Number = i });
             }

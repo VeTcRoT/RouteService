@@ -8,9 +8,43 @@ namespace RouteService.Persistence.Repositories
     {
         public RouteRepository(RouteServiceDbContext dbContext) : base(dbContext) { }
 
-        public Task<Route> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
+        public async Task<Route> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
         {
-            throw new NotImplementedException();
+            var ride = await _dbContext.Routes
+                .Where(r => r.From == from && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId)
+                .Join(
+                    _dbContext.Routes.Where(r => r.To == to && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId),
+                    routeFrom => routeFrom.RouteId,
+                    routeTo => routeTo.RouteId,
+                    (routeFrom, routeTo) => new { RouteFrom = routeFrom, RouteTo = routeTo }
+                )
+                .FirstOrDefaultAsync();
+
+            if (ride == null)
+                return null;
+
+            var ridesToChange = await _dbContext.Routes
+                .Where(r => r.RouteId == routeId && r.DepartureTime >= ride.RouteFrom.DepartureTime && r.ArrivalTime <= ride.RouteTo.ArrivalTime)
+                .ToListAsync();
+
+            foreach (Route route in ridesToChange)
+                route.SeatsAvailable -= numberOfSeats;
+
+            await _dbContext.SaveChangesAsync();
+
+            var routeToReturn = new Route()
+            {
+                RouteId = routeId,
+                DepartureTime = ride.RouteFrom.DepartureTime,
+                ArrivalTime = ride.RouteTo.ArrivalTime,
+                From = from,
+                To = to,
+                NumberOfSeats = ride.RouteFrom.NumberOfSeats,
+                SeatsAvailable = ride.RouteFrom.SeatsAvailable + numberOfSeats,
+                ExtraInfo = ride.RouteFrom.ExtraInfo + "\n" + ride.RouteTo.ExtraInfo
+            };
+
+            return routeToReturn;
         }
 
         public async Task<IEnumerable<Route>?> GetAvailableRoutesByQueryAsync(string from, string to, DateTime departureTime, int numberOfSeats)
