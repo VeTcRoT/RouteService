@@ -46,5 +46,12 @@ namespace RouteService.Persistence.Repositories
 
             return routes;
         }
+
+        public async Task<bool> RouteIdExistsAsync(string routeId)
+        {
+            var route = await _dbContext.Routes.FirstOrDefaultAsync(r => r.RouteId == routeId);
+
+            return route == null ? false : true;
+        }
     }
 }
