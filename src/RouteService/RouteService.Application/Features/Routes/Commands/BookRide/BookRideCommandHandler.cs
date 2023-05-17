@@ -17,19 +17,20 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
 
         public async Task<BookRideDto> Handle(BookRideCommand request, CancellationToken cancellationToken)
         {
-            BookRideDto bookedRide = new ();
+            BookRideDto bookedRide = new() 
+            {
+                IsSuccess = false,
+                Errors = new List<string>(),
+                RouteId = request.RouteId,
+                From = request.From,
+                To = request.To
+            };
 
             var validator = new BookRideCommandValidator();
             var validationResult = await validator.ValidateAsync(request);
 
             if (validationResult.Errors.Count > 0)
             {
-                bookedRide.IsSuccess = false;
-                bookedRide.Errors = new List<string>();
-                bookedRide.RouteId = request.RouteId;
-                bookedRide.From = request.From;
-                bookedRide.To = request.To;
-
                 foreach (var error in validationResult.Errors)
                     bookedRide.Errors.Add(error.ErrorMessage);
 
@@ -40,15 +41,7 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
 
             if (!routeExists) 
             {
-                bookedRide.IsSuccess = false;
-                bookedRide.Errors = new List<string>
-                {
-                    $"RouteId({request.RouteId}) does not exist."
-                };
-                bookedRide.RouteId = request.RouteId;
-                bookedRide.From = request.From;
-                bookedRide.To = request.To;
-
+                bookedRide.Errors.Add($"RouteId({request.RouteId}) does not exist.");
                 return bookedRide;
             }
 
@@ -56,15 +49,7 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
 
             if (ride == null)
             {
-                bookedRide.IsSuccess = false;
-                bookedRide.Errors = new List<string>
-                {
-                    $"Route does not exist."
-                };
-                bookedRide.RouteId = request.RouteId;
-                bookedRide.From = request.From;
-                bookedRide.To = request.To;
-
+                bookedRide.Errors.Add("Route does not exist.");
                 return bookedRide;
             }
 
