@@ -18,7 +18,7 @@ namespace RouteService.Persistence.Repositories
             List<Route> routes = await _dbContext.Routes
                 .Where(r => r.From == from && r.To == to && r.DepartureTime == departureTime && r.SeatsAvailable >= numberOfSeats).ToListAsync();
 
-            if (routes == null)
+            if (routes.Count == 0)
             {
                 routes = new List<Route>();
 
