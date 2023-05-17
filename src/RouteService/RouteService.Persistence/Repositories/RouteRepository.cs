@@ -32,9 +32,6 @@ namespace RouteService.Persistence.Repositories
                     )
                     .ToListAsync();
 
-                var routesFrom = commonRoutes.Select(cr => cr.RouteFrom).ToList();
-                var routesTo = commonRoutes.Select(cr => cr.RouteTo).ToList();
-
                 foreach (var route in commonRoutes)
                 {
                     var neededRoute = new Route()
