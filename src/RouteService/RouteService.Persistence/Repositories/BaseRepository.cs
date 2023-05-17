@@ -5,7 +5,7 @@ namespace RouteService.Persistence.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly RouteServiceDbContext _dbContext;
+        protected readonly RouteServiceDbContext _dbContext;
 
         public BaseRepository(RouteServiceDbContext dbContext)
         {
