@@ -5,7 +5,7 @@ using RouteService.Domain.Interfaces.Repositories;
 
 namespace RouteService.Application.Features.Routes.Queries.GetAvailableRoutes
 {
-    public class GetAvailableRoutesQueryHandler : IRequestHandler<GetAvailableRoutesQuery, IEnumerable<Route>?>
+    public class GetAvailableRoutesQueryHandler : IRequestHandler<GetAvailableRoutesQuery, IEnumerable<Ride>?>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -14,7 +14,7 @@ namespace RouteService.Application.Features.Routes.Queries.GetAvailableRoutes
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Route>?> Handle(GetAvailableRoutesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Ride>?> Handle(GetAvailableRoutesQuery request, CancellationToken cancellationToken)
         {
             var validator = new GetAvailableRoutesQueryValidator();
             var validationResult = await validator.ValidateAsync(request);

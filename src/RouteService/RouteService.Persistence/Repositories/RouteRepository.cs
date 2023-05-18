@@ -4,16 +4,16 @@ using RouteService.Domain.Interfaces.Repositories;
 
 namespace RouteService.Persistence.Repositories
 {
-    public class RouteRepository : BaseRepository<Route>, IRouteRepository
+    public class RouteRepository : BaseRepository<Ride>, IRouteRepository
     {
         public RouteRepository(RouteServiceDbContext dbContext) : base(dbContext) { }
 
-        public async Task<Route?> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
+        public async Task<Ride?> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
         {
-            var ride = await _dbContext.Routes
-                .Where(r => r.From == from && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId)
+            var ride = await _dbContext.Rides
+                .Where(r => r.From == from && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId).Include(r => r.RouteInfo)
                 .Join(
-                    _dbContext.Routes.Where(r => r.To == to && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId),
+                    _dbContext.Rides.Where(r => r.To == to && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId),
                     routeFrom => routeFrom.RouteId,
                     routeTo => routeTo.RouteId,
                     (routeFrom, routeTo) => new { RouteFrom = routeFrom, RouteTo = routeTo }
@@ -23,7 +23,7 @@ namespace RouteService.Persistence.Repositories
             if (ride == null)
                 return null;
 
-            var ridesToChange = await _dbContext.Routes
+            var ridesToChange = await _dbContext.Rides
                 .Where(r => r.RouteId == routeId && r.DepartureTime >= ride.RouteFrom.DepartureTime && r.ArrivalTime <= ride.RouteTo.ArrivalTime)
                 .ToListAsync();
 
@@ -32,12 +32,12 @@ namespace RouteService.Persistence.Repositories
             if (ridesToChange.Count != checkRidesForAvailableSeats.Count)
                 return null;
 
-            foreach (Route route in ridesToChange)
+            foreach (Ride route in ridesToChange)
                 route.SeatsAvailable -= numberOfSeats;
 
             await _dbContext.SaveChangesAsync();
 
-            var routeToReturn = new Route()
+            var routeToReturn = new Ride()
             {
                 RouteId = routeId,
                 DepartureTime = ride.RouteFrom.DepartureTime,
@@ -46,31 +46,31 @@ namespace RouteService.Persistence.Repositories
                 To = to,
                 NumberOfSeats = ride.RouteFrom.NumberOfSeats,
                 SeatsAvailable = ride.RouteFrom.SeatsAvailable + numberOfSeats,
-                ExtraInfo = ride.RouteFrom.ExtraInfo + "\n" + ride.RouteTo.ExtraInfo
+                RouteInfo = ride.RouteFrom.RouteInfo
             };
 
             return routeToReturn;
         }
 
-        public async Task<IEnumerable<Route>?> GetAvailableRoutesByQueryAsync(string from, string to, DateTime departureTime, int numberOfSeats)
+        public async Task<IEnumerable<Ride>?> GetAvailableRoutesByQueryAsync(string from, string to, DateTime departureTime, int numberOfSeats)
         {
-            List<Route> routes = new ();
+            List<Ride> routes = new ();
 
-            var commonRoutes = await _dbContext.Routes
-                .Where(r => r.From == from && r.DepartureTime == departureTime && r.SeatsAvailable >= numberOfSeats)
+            var commonRoutes = await _dbContext.Rides
+                .Where(r => r.From == from && r.DepartureTime == departureTime && r.SeatsAvailable >= numberOfSeats).Include(r => r.RouteInfo)
                 .Join(
-                    _dbContext.Routes.Where(r => r.To == to && r.SeatsAvailable >= numberOfSeats),
+                    _dbContext.Rides.Where(r => r.To == to && r.SeatsAvailable >= numberOfSeats),
                     routeFrom => routeFrom.RouteId,
                     routeTo => routeTo.RouteId,
                     (routeFrom, routeTo) => new { RouteFrom = routeFrom, RouteTo = routeTo }
                 )
                 .ToListAsync();
 
-            var ridesToCheck = new List<Route>();
+            var ridesToCheck = new List<Ride>();
 
             foreach (var ride in commonRoutes)
             {
-                ridesToCheck = await _dbContext.Routes
+                ridesToCheck = await _dbContext.Rides
                     .Where(r => r.RouteId == ride.RouteFrom.RouteId && r.DepartureTime >= ride.RouteFrom.DepartureTime && r.ArrivalTime <= ride.RouteTo.ArrivalTime)
                     .ToListAsync();
             }
@@ -82,7 +82,7 @@ namespace RouteService.Persistence.Repositories
 
             foreach (var route in commonRoutes)
             {
-                var neededRoute = new Route()
+                var neededRoute = new Ride()
                 {
                     Id = route.RouteFrom.Id,
                     RouteId = route.RouteFrom.RouteId,
@@ -92,7 +92,7 @@ namespace RouteService.Persistence.Repositories
                     To = route.RouteTo.To,
                     NumberOfSeats = route.RouteFrom.NumberOfSeats,
                     SeatsAvailable = route.RouteFrom.SeatsAvailable,
-                    ExtraInfo = route.RouteFrom.ExtraInfo + route.RouteTo.ExtraInfo,
+                    RouteInfo = route.RouteFrom.RouteInfo
                 };
 
                 routes.Add(neededRoute);
@@ -103,7 +103,7 @@ namespace RouteService.Persistence.Repositories
 
         public async Task<bool> RouteIdExistsAsync(string routeId)
         {
-            var route = await _dbContext.Routes.FirstOrDefaultAsync(r => r.RouteId == routeId);
+            var route = await _dbContext.Rides.FirstOrDefaultAsync(r => r.RouteId == routeId);
 
             return route == null ? false : true;
         }

@@ -17,7 +17,7 @@ namespace RouteService.Api.Controllers
         }
 
         [HttpPost("getavailableroutes", Name = "GetAvailableRoutes")]
-        public async Task<IActionResult> GetAvailableRoutes([FromBody]GetAvailableRoutesQuery request)
+        public async Task<IActionResult> GetAvailableRoutes([FromBody] GetAvailableRoutesQuery request)
         {
             var routes = await _mediator.Send(request);
 

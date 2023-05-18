@@ -57,6 +57,9 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
             bookedRide.IsSuccess = true;
             bookedRide.Seats = new List<SeatDto>();
 
+            var extraInfo = _mapper.Map<RouteDto>(bookedRide.RouteInfo);
+            bookedRide.RouteInfo = extraInfo;
+
             int seatsFrom = ride.NumberOfSeats - ride.SeatsAvailable + 1;
             int seatsTo = ride.NumberOfSeats - ride.SeatsAvailable + request.NumberOfSeats;
 

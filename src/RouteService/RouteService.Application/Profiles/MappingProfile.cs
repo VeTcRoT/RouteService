@@ -8,7 +8,8 @@ namespace RouteService.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<Route, BookRideDto>();
+            CreateMap<Ride, BookRideDto>();
+            CreateMap<Route, RouteDto>();
         }
     }
 }

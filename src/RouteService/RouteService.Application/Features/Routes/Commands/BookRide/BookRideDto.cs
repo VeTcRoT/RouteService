@@ -1,4 +1,6 @@
-﻿namespace RouteService.Application.Features.Routes.Commands.BookRide
+﻿using RouteService.Domain.Entities;
+
+namespace RouteService.Application.Features.Routes.Commands.BookRide
 {
     public class BookRideDto
     {
@@ -10,6 +12,6 @@
         public string From { get; set; } = string.Empty;
         public string To { get; set; } = string.Empty;
         public ICollection<SeatDto> Seats { get; set; } = null!;
-        public string ExtraInfo { get; set; } = string.Empty;
+        public RouteDto? RouteInfo { get; set; }
     }
 }
