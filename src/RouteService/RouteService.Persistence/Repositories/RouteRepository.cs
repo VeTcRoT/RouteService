@@ -45,7 +45,7 @@ namespace RouteService.Persistence.Repositories
                 From = from,
                 To = to,
                 NumberOfSeats = ride.RouteFrom.NumberOfSeats,
-                SeatsAvailable = ride.RouteFrom.SeatsAvailable + numberOfSeats,
+                SeatsAvailable = ride.RouteFrom.SeatsAvailable,
                 RouteInfo = ride.RouteFrom.RouteInfo
             };
 
