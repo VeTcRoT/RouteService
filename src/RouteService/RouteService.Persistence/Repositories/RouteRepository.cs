@@ -8,7 +8,7 @@ namespace RouteService.Persistence.Repositories
     {
         public RouteRepository(RouteServiceDbContext dbContext) : base(dbContext) { }
 
-        public async Task<Route> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
+        public async Task<Route?> BookRideAsync(string routeId, string from, string to, int numberOfSeats)
         {
             var ride = await _dbContext.Routes
                 .Where(r => r.From == from && r.SeatsAvailable >= numberOfSeats && r.RouteId == routeId)
@@ -26,6 +26,11 @@ namespace RouteService.Persistence.Repositories
             var ridesToChange = await _dbContext.Routes
                 .Where(r => r.RouteId == routeId && r.DepartureTime >= ride.RouteFrom.DepartureTime && r.ArrivalTime <= ride.RouteTo.ArrivalTime)
                 .ToListAsync();
+
+            var checkRidesForAvailableSeats = ridesToChange.Where(r => r.SeatsAvailable >= numberOfSeats).ToList();
+
+            if (ridesToChange.Count != checkRidesForAvailableSeats.Count)
+                return null;
 
             foreach (Route route in ridesToChange)
                 route.SeatsAvailable -= numberOfSeats;
@@ -61,6 +66,20 @@ namespace RouteService.Persistence.Repositories
                 )
                 .ToListAsync();
 
+            var ridesToCheck = new List<Route>();
+
+            foreach (var ride in commonRoutes)
+            {
+                ridesToCheck = await _dbContext.Routes
+                    .Where(r => r.RouteId == ride.RouteFrom.RouteId && r.DepartureTime >= ride.RouteFrom.DepartureTime && r.ArrivalTime <= ride.RouteTo.ArrivalTime)
+                    .ToListAsync();
+            }
+                
+            var checkRidesForAvailableSeats = ridesToCheck.Where(r => r.SeatsAvailable >= numberOfSeats).ToList();
+
+            if (ridesToCheck.Count != checkRidesForAvailableSeats.Count)
+                return null;
+
             foreach (var route in commonRoutes)
             {
                 var neededRoute = new Route()
@@ -71,6 +90,7 @@ namespace RouteService.Persistence.Repositories
                     ArrivalTime = route.RouteTo.ArrivalTime,
                     From = route.RouteFrom.From,
                     To = route.RouteTo.To,
+                    NumberOfSeats = route.RouteFrom.NumberOfSeats,
                     SeatsAvailable = route.RouteFrom.SeatsAvailable,
                     ExtraInfo = route.RouteFrom.ExtraInfo + route.RouteTo.ExtraInfo,
                 };
