@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RouteService.Application.Features.Routes.Commands.BookRide;
 using RouteService.Application.Features.Routes.Commands.CreateRide;
+using RouteService.Application.Features.Routes.Commands.DeleteRide;
 using RouteService.Application.Features.Routes.Commands.UpdateRide;
 using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
 using RouteService.Application.Features.Routes.Queries.GetRideById;
@@ -63,6 +64,14 @@ namespace RouteService.Api.Controllers
         public async Task<IActionResult> UpdateRide([FromBody] UpdateRideCommand request)
         {
             await _mediator.Send(request);
+
+            return Ok();
+        }
+
+        [HttpDelete("{rideId}", Name = "DeleteRide")]
+        public async Task<IActionResult> DeleteRide(int rideId)
+        {
+            await _mediator.Send(new DeleteRideCommand() { RideId = rideId });
 
             return Ok();
         }

@@ -16,10 +16,10 @@ namespace RouteService.Application.Features.Routes.Commands.DeleteRide
 
         public async Task Handle(DeleteRideCommand request, CancellationToken cancellationToken)
         {
-            var ride = await _unitOfWork.RouteRepository.GetByIdAsync(request.Id);
+            var ride = await _unitOfWork.RouteRepository.GetByIdAsync(request.RideId);
 
             if (ride == null) 
-                throw new NotFoundException(nameof(Ride), request.Id);
+                throw new NotFoundException(nameof(Ride), request.RideId);
 
             _unitOfWork.RouteRepository.Delete(ride);
 
