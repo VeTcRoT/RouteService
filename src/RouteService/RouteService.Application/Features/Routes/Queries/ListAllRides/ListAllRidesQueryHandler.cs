@@ -17,7 +17,7 @@ namespace RouteService.Application.Features.Routes.Queries.ListAllRides
 
         public async Task<IEnumerable<ListAllRidesDto>> Handle(ListAllRidesQuery request, CancellationToken cancellationToken)
         {
-            var allRides = await _unitOfWork.RouteRepository.ListAllAsync();
+            var allRides = await _unitOfWork.RouteRepository.ListAllRidesAsync();
 
             return _mapper.Map<IEnumerable<ListAllRidesDto>>(allRides);
         }

@@ -20,7 +20,7 @@ namespace RouteService.Application.Features.Routes.Queries.GetRideById
 
         public async Task<RideDto> Handle(GetRideByIdQuery request, CancellationToken cancellationToken)
         {
-            var ride = await _unitOfWork.RouteRepository.GetByIdAsync(request.RideId);
+            var ride = await _unitOfWork.RouteRepository.GetRideByIdAsync(request.RideId);
 
             if (ride == null)
                 throw new NotFoundException(nameof(Ride), request.RideId);
