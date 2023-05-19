@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RouteService.Application.Features.RoutesInfo.Queries.GetRouteInfoById;
 using RouteService.Application.Features.RoutesInfo.Queries.ListAllRouteInfo;
 
 namespace RouteService.Api.Controllers
@@ -21,6 +22,14 @@ namespace RouteService.Api.Controllers
             var routeInfos = await _mediator.Send(new ListAllRouteInfoQuery());
 
             return Ok(routeInfos);
+        }
+
+        [HttpGet("{routeInfoId}", Name = "GetRouteInfoById")]
+        public async Task<IActionResult> GetRouteInfoById(int routeInfoId)
+        {
+            var routeInfo = await _mediator.Send(new GetRouteInfoByIdQuery() { RouteInfoId = routeInfoId });
+
+            return Ok(routeInfo);
         }
     }
 }
