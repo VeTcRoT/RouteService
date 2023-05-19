@@ -1,6 +1,6 @@
-﻿namespace RouteService.Domain.Entities
+﻿namespace RouteService.Application.Features.Routes.Commands.CreateRide
 {
-    public class Ride
+    public class CreateRideDto
     {
         public int Id { get; set; }
         public string RouteId { get; set; } = string.Empty;
@@ -10,7 +10,6 @@
         public string To { get; set; } = string.Empty;
         public int NumberOfSeats { get; set; }
         public int SeatsAvailable { get; set; }
-        public int? RouteInfoId { get; set; }
-        public Route? RouteInfo { get; set; }
+        public string ExtraInfo { get; set; } = string.Empty;
     }
 }
