@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RouteService.Application.Features.RoutesInfo.Commands.CreateRouteInfo;
+using RouteService.Application.Features.RoutesInfo.Commands.DeleteRouteInfo;
 using RouteService.Application.Features.RoutesInfo.Commands.UpdateRouteInfo;
 using RouteService.Application.Features.RoutesInfo.Queries.GetRouteInfoById;
 using RouteService.Application.Features.RoutesInfo.Queries.ListAllRouteInfo;
@@ -46,6 +47,14 @@ namespace RouteService.Api.Controllers
         public async Task<IActionResult> UpdateRouteInfo([FromBody] UpdateRouteInfoCommand request)
         {
             await _mediator.Send(request);
+
+            return Ok();
+        }
+
+        [HttpDelete("{routeInfoId}", Name = "DeleteRouteInfo")]
+        public async Task<IActionResult> DeleteRouteInfo(int routeInfoId)
+        {
+            await _mediator.Send(new DeleteRouteInfoCommand() { RouteInfoId = routeInfoId });
 
             return Ok();
         }

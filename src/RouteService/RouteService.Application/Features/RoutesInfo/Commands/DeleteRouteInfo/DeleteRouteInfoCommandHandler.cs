@@ -15,10 +15,10 @@ namespace RouteService.Application.Features.RoutesInfo.Commands.DeleteRouteInfo
 
         public async Task Handle(DeleteRouteInfoCommand request, CancellationToken cancellationToken)
         {
-            var routeInfo = await _unitOfWork.RouteInfoRepository.GetByIdAsync(request.Id);
+            var routeInfo = await _unitOfWork.RouteInfoRepository.GetByIdAsync(request.RouteInfoId);
 
             if (routeInfo == null)
-                throw new NotFoundException("RouteInfo", request.Id);
+                throw new NotFoundException("RouteInfo", request.RouteInfoId);
 
             _unitOfWork.RouteInfoRepository.Delete(routeInfo);
 
