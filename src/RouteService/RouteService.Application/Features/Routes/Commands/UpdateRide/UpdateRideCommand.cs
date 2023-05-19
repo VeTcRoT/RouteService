@@ -1,9 +1,10 @@
 ﻿using MediatR;
 
-namespace RouteService.Application.Features.Routes.Commands.CreateRide
+namespace RouteService.Application.Features.Routes.Commands.UpdateRide
 {
-    public class CreateRideCommand : IRequest<CreateRideDto>
+    public class UpdateRideCommand : IRequest
     {
+        public int Id { get; set; }
         public string RouteId { get; set; } = string.Empty;
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }

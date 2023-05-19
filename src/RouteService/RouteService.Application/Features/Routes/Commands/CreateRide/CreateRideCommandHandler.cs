@@ -29,6 +29,8 @@ namespace RouteService.Application.Features.Routes.Commands.CreateRide
 
             var createdRide = await _unitOfWork.RouteRepository.CreateAsync(ride);
 
+            await _unitOfWork.SaveAsync();
+
             return _mapper.Map<CreateRideDto>(createdRide);
         }
     }
