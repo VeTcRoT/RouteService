@@ -57,10 +57,10 @@ namespace RouteService.Application.Features.Routes.Commands.BookRide
             bookedRide.IsSuccess = true;
             bookedRide.Seats = new List<SeatDto>();
 
-            int seatsFrom = ride.NumberOfSeats - ride.SeatsAvailable - request.NumberOfSeats;
+            int seatsFrom = ride.NumberOfSeats - ride.SeatsAvailable - request.NumberOfSeats + 1;
             int seatsTo = ride.NumberOfSeats - ride.SeatsAvailable;
 
-            for (int i = seatsFrom; i < seatsTo; i++)
+            for (int i = seatsFrom; i <= seatsTo; i++)
             {
                 bookedRide.Seats.Add(new SeatDto() { Number = i });
             }
