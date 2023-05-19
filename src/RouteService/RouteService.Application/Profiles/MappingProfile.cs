@@ -5,6 +5,7 @@ using RouteService.Application.Features.Routes.Commands.UpdateRide;
 using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
 using RouteService.Application.Features.Routes.Queries.ListAllRides;
 using RouteService.Application.Features.RoutesInfo.Commands.CreateRouteInfo;
+using RouteService.Application.Features.RoutesInfo.Commands.UpdateRouteInfo;
 using RouteService.Application.Features.RoutesInfo.Queries.GetRouteInfoById;
 using RouteService.Domain.Dtos;
 using RouteService.Domain.Entities;
@@ -33,6 +34,8 @@ namespace RouteService.Application.Profiles
             CreateMap<Route, RouteInfoDto>();
 
             CreateMap<CreateRouteInfoCommand, Route>();
+
+            CreateMap<UpdateRouteInfoCommand, Route>();
         }
     }
 }
