@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RouteService.Application.Features.Routes.Commands.BookRide;
+using RouteService.Application.Features.Routes.Commands.CreateRide;
 using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
 using RouteService.Application.Features.Routes.Queries.GetRideById;
 using RouteService.Application.Features.Routes.Queries.ListAllRides;
@@ -47,6 +48,14 @@ namespace RouteService.Api.Controllers
             var rides = await _mediator.Send(new ListAllRidesQuery());
 
             return Ok(rides);
+        }
+
+        [HttpPost("createride", Name = "CreateRide")]
+        public async Task<IActionResult> CreateRide([FromBody] CreateRideCommand request)
+        {
+            var createdRide = await _mediator.Send(request);
+
+            return Ok(createdRide);
         }
     }
 }

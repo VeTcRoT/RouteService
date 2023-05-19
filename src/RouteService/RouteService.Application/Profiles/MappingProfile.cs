@@ -23,8 +23,7 @@ namespace RouteService.Application.Profiles
 
             CreateMap<CreateRideCommand, Ride>();
 
-            CreateMap<Ride, CreateRideDto>()
-                .ForMember(dest => dest.ExtraInfo, opt => opt.MapFrom(src => src.RouteInfo.ExtraInfo));
+            CreateMap<Ride, CreateRideDto>();
 
             CreateMap<UpdateRideCommand, Ride>();
         }
