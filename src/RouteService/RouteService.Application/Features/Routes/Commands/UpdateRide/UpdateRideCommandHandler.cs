@@ -25,12 +25,12 @@ namespace RouteService.Application.Features.Routes.Commands.UpdateRide
             if (validationResult.Errors.Count > 0)
                 throw new ValidationException(validationResult);
 
-            var checkRideId = await _unitOfWork.RouteRepository.GetByIdAsync(request.Id);
+            var rideToUpdate = await _unitOfWork.RouteRepository.GetByIdAsync(request.Id);
 
-            if (checkRideId == null)
+            if (rideToUpdate == null)
                 throw new NotFoundException(nameof(Ride), request.Id);
 
-            _unitOfWork.RouteRepository.Update(_mapper.Map<Ride>(request));
+            _mapper.Map(request, rideToUpdate, typeof(UpdateRideCommand), typeof(Ride));
 
             await _unitOfWork.SaveAsync();
         }

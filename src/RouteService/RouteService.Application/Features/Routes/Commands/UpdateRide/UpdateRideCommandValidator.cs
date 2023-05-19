@@ -14,7 +14,8 @@ namespace RouteService.Application.Features.Routes.Commands.UpdateRide
             RuleFor(c => c.RouteId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()
-                .Length(10).WithMessage("{PropertyName} length should be equal to 10.");
+                .MinimumLength(6).WithMessage("{PropertyName} length should be greater or equal to 6.")
+                .MaximumLength(10).WithMessage("{PropertyName} length should be less or equal to 10.");
 
             RuleFor(c => c.DepartureTime)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
