@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using RouteService.Application.Features.Routes.Commands.BookRide;
 using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
+using RouteService.Application.Features.Routes.Queries.ListAllRides;
 using RouteService.Domain.Entities;
 
 namespace RouteService.Application.Profiles
@@ -13,6 +14,9 @@ namespace RouteService.Application.Profiles
                 .ForMember(dest => dest.ExtraInfo, opt => opt.MapFrom(src => src.RouteInfo.ExtraInfo));
 
             CreateMap<Ride, BookRideDto>()
+                .ForMember(dest => dest.ExtraInfo, opt => opt.MapFrom(src => src.RouteInfo.ExtraInfo));
+
+            CreateMap<Ride, ListAllRidesDto>()
                 .ForMember(dest => dest.ExtraInfo, opt => opt.MapFrom(src => src.RouteInfo.ExtraInfo));
         }
     }
