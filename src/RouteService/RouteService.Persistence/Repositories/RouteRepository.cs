@@ -117,7 +117,7 @@ namespace RouteService.Persistence.Repositories
 
         public async Task<IEnumerable<Ride>> ListAllRidesAsync()
         {
-            var rides = await _dbContext.Rides.Include(r => r.RouteInfo).OrderByDescending(r => r.DepartureTime).ToListAsync();
+            var rides = await _dbContext.Rides.Include(r => r.RouteInfo).OrderByDescending(r => r.RouteId).ToListAsync();
 
             return rides;
         }
