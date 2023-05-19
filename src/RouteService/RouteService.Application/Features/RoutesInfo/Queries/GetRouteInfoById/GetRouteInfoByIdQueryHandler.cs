@@ -2,6 +2,7 @@
 using MediatR;
 using RouteService.Application.Exceptions;
 using RouteService.Domain.Interfaces.Repositories;
+using RouteService.Domain.Dtos;
 
 namespace RouteService.Application.Features.RoutesInfo.Queries.GetRouteInfoById
 {

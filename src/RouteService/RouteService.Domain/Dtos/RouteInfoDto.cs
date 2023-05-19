@@ -1,4 +1,4 @@
-﻿namespace RouteService.Application.Features.RoutesInfo.Queries.GetRouteInfoById
+﻿namespace RouteService.Domain.Dtos
 {
     public class RouteInfoDto
     {
