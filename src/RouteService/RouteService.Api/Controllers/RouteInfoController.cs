@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RouteService.Application.Features.RoutesInfo.Queries.ListAllRouteInfo;
 
 namespace RouteService.Api.Controllers
 {
@@ -6,9 +8,19 @@ namespace RouteService.Api.Controllers
     [ApiController]
     public class RouteInfoController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly IMediator _mediator;
+
+        public RouteInfoController(IMediator mediator)
         {
-            return View();
+            _mediator = mediator;
+        }
+
+        [HttpGet("listallrouteinfo", Name = "ListAllRouteInfo")]
+        public async Task<IActionResult> ListAllRouteInfo()
+        {
+            var routeInfos = await _mediator.Send(new ListAllRouteInfoQuery());
+
+            return Ok(routeInfos);
         }
     }
 }
