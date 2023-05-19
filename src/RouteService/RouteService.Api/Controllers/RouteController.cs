@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RouteService.Application.Features.Routes.Commands.BookRide;
 using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
+using RouteService.Application.Features.Routes.Queries.GetRideById;
 
 namespace RouteService.Api.Controllers
 {
@@ -29,6 +30,14 @@ namespace RouteService.Api.Controllers
             var route = await _mediator.Send(request);
 
             return Ok(route);
+        }
+
+        [HttpGet("{rideId}", Name = "GetRideById")]
+        public async Task<IActionResult> GetRideById(int rideId)
+        {
+            var ride = await _mediator.Send(new GetRideByIdQuery() { RideId = rideId });
+
+            return Ok(ride);
         }
     }
 }
