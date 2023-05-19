@@ -1,6 +1,4 @@
-﻿using RouteService.Domain.Entities;
-
-namespace RouteService.Application.Features.Routes.Queries.GetAvailableRoutes
+﻿namespace RouteService.Domain.Dtos
 {
     public class RideDto
     {

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RouteService.Domain.Entities;
+using RouteService.Domain.Dtos;
 
 namespace RouteService.Application.Features.Routes.Queries.GetAvailableRoutes
 {

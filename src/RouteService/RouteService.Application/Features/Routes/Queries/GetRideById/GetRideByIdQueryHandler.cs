@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using RouteService.Application.Exceptions;
-using RouteService.Application.Features.Routes.Queries.GetAvailableRoutes;
 using RouteService.Domain.Entities;
 using RouteService.Domain.Interfaces.Repositories;
+using RouteService.Domain.Dtos;
 
 namespace RouteService.Application.Features.Routes.Queries.GetRideById
 {
