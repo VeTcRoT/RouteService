@@ -107,5 +107,19 @@ namespace RouteService.Persistence.Repositories
 
             return route == null ? false : true;
         }
+
+        public async Task<Ride> GetRideByIdAsync(int rideId)
+        {
+            var ride = await _dbContext.Rides.Include(r => r.RouteInfo).FirstOrDefaultAsync(r => r.Id == rideId);
+
+            return ride;
+        }
+
+        public async Task<IEnumerable<Ride>> ListAllRidesAsync()
+        {
+            var rides = await _dbContext.Rides.Include(r => r.RouteInfo).OrderByDescending(r => r.DepartureTime).ToListAsync();
+
+            return rides;
+        }
     }
 }
