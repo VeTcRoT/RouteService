@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using RouteService.Application.Features.Routes.Commands.CreateRide;
 
 namespace RouteService.Application.Features.Routes.Commands.UpdateRide
 {
@@ -14,8 +13,7 @@ namespace RouteService.Application.Features.Routes.Commands.UpdateRide
             RuleFor(c => c.RouteId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()
-                .MinimumLength(6).WithMessage("{PropertyName} length should be greater or equal to 6.")
-                .MaximumLength(10).WithMessage("{PropertyName} length should be less or equal to 10.");
+                .Length(64).WithMessage("{ProperyName} length must equal to 64.");
 
             RuleFor(c => c.DepartureTime)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
