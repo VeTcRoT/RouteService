@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  route-service-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"  
+    volumes:
+      - ./db-data:/app/Data
