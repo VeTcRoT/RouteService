@@ -48,6 +48,7 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI(options => {
             options.SwaggerEndpoint("/swagger/V1/swagger.json", "RouteService");
+            options.DefaultModelsExpandDepth(-1);
         });
 
 app.UseCustomExceptionHandler();
